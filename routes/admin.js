@@ -20,7 +20,7 @@ const storage = multer.diskStorage({
 const upload = multer({storage})
 
 router.get('/item',admin, item.getAllItems)
-router.post('/item', admin, upload.single('image'), item.addItem)
+router.post('/item', admin, item.addItem)
 router.put('/item/:id', admin, upload.single('image'), item.updateItem)
 router.delete('/item/:id', admin, item.deleteItem)
 

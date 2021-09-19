@@ -17,6 +17,13 @@ exports.getItemById = async (req, res) => {
 
     const item = await Item.findByPk(id);
 
+    if(!item){
+        return res.status(404).json({
+            status : 'fail',
+            message: 'Item tidak ditemukan'
+        })
+    }
+
     res.status(200).json({
         status: 'success',
         data: {

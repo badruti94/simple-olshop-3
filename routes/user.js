@@ -20,6 +20,7 @@ const storage = multer.diskStorage({
 const upload = multer({storage})
 
 router.get('/item', item.getItem)
+router.get('/item/search',item.searchItem)
 router.get('/item/:id', item.getItemById)
 
 router.post('/order', user, upload.single('transfer_proof'), order.order)

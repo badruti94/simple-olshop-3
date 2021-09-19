@@ -1,3 +1,4 @@
+const { Op } = require('sequelize')
 const {sequelize, Sequelize} = require('../../models')
 const Item = require('../../models/items')(sequelize, Sequelize.DataTypes)
 
@@ -23,6 +24,47 @@ exports.getItem = async (req, res) =>  {
                 firstPage : 1,
                 lastPage,
                 prev: activePage - 1,
+                next : activePage + 1
+            }
+        }
+    })
+}
+
+exports.searchItem = async (req, res) => {
+    const {page, keyword} = req.query
+
+    const perPage = 10
+    const activePage = page ? parseInt(page) : 1
+
+    const totalData = await Item.count({
+        where: {
+            name : {
+                [Op.like] : `%${keyword}%`
+            }
+        }
+    })
+    const lastPage = Math.ceil(totalData / perPage)
+    const index = (perPage * activePage) - perPage
+
+    const items = await Item.findAll({
+        where: {
+            name : {
+                [Op.like] : `%${keyword}%`
+            }
+        }
+    },{
+        offset: index,
+        limit: perPage
+    })
+
+    res.status(200).json({
+        status : 'success',
+        data: {
+            items,
+            pagination : {
+                firstPage: 1,
+                lastPage,
+                prev : activePage - 1, 
                 next : activePage + 1
             }
         }

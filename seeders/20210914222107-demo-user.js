@@ -1,7 +1,6 @@
-'use strict';
-const faker = require('faker')
-const bcrypt = require('bcrypt')
-require('dotenv').config()
+const faker = require('faker');
+const bcrypt = require('bcrypt');
+require('dotenv').config();
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
@@ -15,7 +14,7 @@ module.exports = {
      * }], {});
      */
     const data = [];
-    const password = await bcrypt.hash('password', 10)
+    const password = await bcrypt.hash('password', 10);
 
     data.push({
       name: 'Andi',
@@ -25,9 +24,9 @@ module.exports = {
       role: 'admin',
       createdAt: new Date(),
       updatedAt: new Date(),
-    })
+    });
     for (let i = 1; i <= 10; i++) {
-      const name = faker.name.findName()
+      const name = faker.name.findName();
       data.push({
         name,
         email: process.env.EXAMPLE_EMAIL,
@@ -36,9 +35,9 @@ module.exports = {
         role: 'user',
         createdAt: new Date(),
         updatedAt: new Date(),
-      })
+      });
     }
-    await queryInterface.bulkInsert('users', data)
+    await queryInterface.bulkInsert('users', data);
   },
 
   down: async (queryInterface, Sequelize) => {
@@ -48,6 +47,6 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-    await queryInterface.bulkDelete('users', null, {})
-  }
+    await queryInterface.bulkDelete('users', null, {});
+  },
 };

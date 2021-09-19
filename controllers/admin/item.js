@@ -1,3 +1,5 @@
+const fs = require('fs')
+const path = require('path')
 const {sequelize, Sequelize} = require('../../models')
 const Item = require('../../models/items')(sequelize, Sequelize.DataTypes)
 
@@ -57,6 +59,18 @@ exports.updateItem = async (req,res) => {
 
 exports.deleteItem = async (req, res) => {
     const {id} = req.params
+
+    const itemForDelete = await Item.findByPk(id)
+    const {image} = itemForDelete
+
+    fs.unlink(path.join(__dirname, '../../public/assets/img/item/' + image), err => {
+        if(err){
+            return res.status(500).json({
+                status : 'fail',
+                message: err.message
+            })
+        }
+    })
 
     const item = await Item.destroy({
         where: {
